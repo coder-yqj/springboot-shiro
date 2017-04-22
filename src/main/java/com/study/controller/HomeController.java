@@ -19,7 +19,7 @@ public class HomeController {
 
     @RequestMapping(value="/login",method=RequestMethod.POST)
     public String login(HttpServletRequest request, Map<String, Object> map){
-        return "";
+        return "user/users";
     }
 
 }

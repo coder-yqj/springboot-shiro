@@ -9,7 +9,8 @@
     <title>登录页面</title>
 </head>
 <body>
-<div id="loginbox">
+<div id="loginbox"><!--/*@thymesVar id="msg" type="java.lang.String"*/-->
+<span th:text="${msg}"></span>
     <form id="loginform" class="form-vertical" th:action="@{/login}" action="" method="post">
         <div class="control-group normal_text"> <h3><img th:src="@{img/logo.png}" alt="Logo" /></h3></div>
         <div class="control-group">

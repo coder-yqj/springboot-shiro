@@ -75,4 +75,14 @@ public class User {
     public void setEnable(Integer enable) {
         this.enable = enable;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", enable=" + enable +
+                '}';
+    }
 }

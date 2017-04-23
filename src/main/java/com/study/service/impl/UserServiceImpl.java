@@ -35,4 +35,16 @@ public class UserServiceImpl extends BaseService<User> implements UserService{
         List<User> userList = selectByExample(example);
         return new PageInfo<>(userList);
     }
+
+    @Override
+    public User selectByUsername(String username) {
+        Example example = new Example(User.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("username",username);
+        List<User> userList = selectByExample(example);
+        if(userList.size()>0){
+            return userList.get(0);
+        }
+            return null;
+    }
 }

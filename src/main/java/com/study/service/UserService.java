@@ -8,4 +8,6 @@ import com.study.model.User;
  */
 public interface UserService extends IService<User>{
     public PageInfo<User> selectByPage(User user, int start, int length);
+
+    public User selectByUsername(String username);
 }

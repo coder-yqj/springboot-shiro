@@ -36,7 +36,7 @@ public class HomeController {
         UsernamePasswordToken token=new UsernamePasswordToken(user.getUsername(),user.getPassword());
         try {
             subject.login(token);
-            return "redirect:user";
+            return "redirect:usersPage";
         }catch (LockedAccountException lae) {
             token.clear();
             request.setAttribute("msg", "用户已经被锁定不能登录，请与管理员联系！");
@@ -47,9 +47,14 @@ public class HomeController {
             return "login";
         }
     }
-    @RequestMapping("/user")
-    public String user(){
+    @RequestMapping("/usersPage")
+    public String usersPage(){
         return "user/users";
+    }
+
+    @RequestMapping("/resourcesPage")
+    public String resourcesPage(){
+        return "resources/resources";
     }
 
 }

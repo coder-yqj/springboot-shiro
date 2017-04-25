@@ -183,22 +183,22 @@
 					this.setting.treeObj.trigger(consts.event.CHECK, [null, this.setting.treeId, node]);
 				}
 			}
-		}
+		};
 
 		zTreeTools.checkAllNodes = function(checked) {
 			view.repairAllChk(this.setting, !!checked);
-		}
+		};
 
 		zTreeTools.getCheckedNodes = function(checked) {
 			var childKey = this.setting.data.key.children;
 			checked = (checked !== false);
 			return data.getTreeCheckedNodes(this.setting, data.getRoot(this.setting)[childKey], checked);
-		}
+		};
 
 		zTreeTools.getChangeCheckedNodes = function() {
 			var childKey = this.setting.data.key.children;
 			return data.getTreeChangeCheckedNodes(this.setting, data.getRoot(this.setting)[childKey]);
-		}
+		};
 
 		zTreeTools.setChkDisabled = function(node, disabled, inheritParent, inheritChildren) {
 			disabled = !!disabled;
@@ -206,7 +206,7 @@
 			inheritChildren = !!inheritChildren;
 			view.repairSonChkDisabled(this.setting, node, disabled, inheritChildren);
 			view.repairParentChkDisabled(this.setting, node.getParentNode(), disabled, inheritParent);
-		}
+		};
 
 		var _updateNode = zTreeTools.updateNode;
 		zTreeTools.updateNode = function(node, checkTypeFlag) {
@@ -604,7 +604,7 @@
 		if (_createNodes) _createNodes.apply(view, arguments);
 		if (!nodes) return;
 		view.repairParentChkClassWithSelf(setting, parentNode);
-	}
+	};
 	var _removeNode = view.removeNode;
 	view.removeNode = function(setting, node) {
 		var parentNode = node.getParentNode();
@@ -612,7 +612,7 @@
 		if (!node || !parentNode) return;
 		view.repairChkClass(setting, parentNode);
 		view.repairParentChkClass(setting, parentNode);
-	}
+	};
 
 	var _appendNodes = view.appendNodes;
 	view.appendNodes = function(setting, level, nodes, parentNode, index, initFlag, openFlag) {

@@ -7,7 +7,7 @@ import com.study.model.User;
  * Created by yangqj on 2017/4/21.
  */
 public interface UserService extends IService<User>{
-    public PageInfo<User> selectByPage(User user, int start, int length);
+    PageInfo<User> selectByPage(User user, int start, int length);
 
-    public User selectByUsername(String username);
+    User selectByUsername(String username);
 }

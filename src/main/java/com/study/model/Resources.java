@@ -1,7 +1,6 @@
 package com.study.model;
 
 import javax.persistence.*;
-
 public class Resources {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -160,5 +159,18 @@ public class Resources {
      */
     public void setSort(Integer sort) {
         this.sort = sort;
+    }
+
+    @Override
+    public String toString() {
+        return "Resources{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", reskey='" + reskey + '\'' +
+                ", resurl='" + resurl + '\'' +
+                ", type=" + type +
+                ", parentid=" + parentid +
+                ", sort=" + sort +
+                '}';
     }
 }

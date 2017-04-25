@@ -1,17 +1,23 @@
 package com.study.config.shiro;
 
+import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
 import com.study.model.Resources;
+import com.study.model.User;
 import com.study.service.ResourcesService;
+import com.study.service.UserService;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.mgt.SecurityManager;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.util.LinkedHashMap;
@@ -23,8 +29,11 @@ import java.util.Map;
  */
 @Configuration
 public class ShiroConfig {
-    @Autowired(required = false)
+    @Resource
     private ResourcesService resourcesService;
+
+    @Resource
+    private UserService userService;
 
     /**
      * ShiroFilterFactoryBean 处理拦截资源文件问题。
@@ -47,7 +56,7 @@ public class ShiroConfig {
         // 如果不设置默认会自动寻找Web工程根目录下的"/login.jsp"页面
         shiroFilterFactoryBean.setLoginUrl("/login");
         // 登录成功后要跳转的链接
-        shiroFilterFactoryBean.setSuccessUrl("/user");
+        shiroFilterFactoryBean.setSuccessUrl("/usersPage");
         //未授权界面;
         shiroFilterFactoryBean.setUnauthorizedUrl("/403");
         //拦截器.
@@ -63,15 +72,18 @@ public class ShiroConfig {
         //<!-- authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问-->
         filterChainDefinitionMap.put("/user", "authc");
         //自定义加载权限资源关系
-        List<Resources> resourcesList = resourcesService.selectByExample(new Resources());
-        for(Resources resources:resourcesList){
+         /* List<Resources> resourcesList = resourcesService.selectByExample(new Example(Resources.class));*/
+      /*  PageInfo<Resources> pageInfo = resourcesService.selectByPage(new Resources(), 1, 20);*/
+        User user = userService.selectByUsername("admin");
+        System.out.println(user.getUsername()+"======");
+        /* for(Resources resources:resourcesList){
 
             if (StringUtil.isNotEmpty(resources.getResurl())&& StringUtil.isNotEmpty(resources.getReskey())) {
                 String permission = "perms[" + resources.getReskey()+ "]";
                 System.out.println(resources.getResurl()+"---"+permission);
                 filterChainDefinitionMap.put(resources.getResurl(),permission);
             }
-        }
+        }*/
         filterChainDefinitionMap.put("/**", "authc");
 
 
@@ -91,7 +103,7 @@ public class ShiroConfig {
     @Bean
     public MyShiroRealm myShiroRealm(){
         MyShiroRealm myShiroRealm = new MyShiroRealm();
-        myShiroRealm.setCredentialsMatcher(hashedCredentialsMatcher());;
+        myShiroRealm.setCredentialsMatcher(hashedCredentialsMatcher());
         return myShiroRealm;
     }
 

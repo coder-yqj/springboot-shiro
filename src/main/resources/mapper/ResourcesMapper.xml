@@ -13,4 +13,23 @@
     <result column="parentId" jdbcType="INTEGER" property="parentid" />
     <result column="sort" jdbcType="INTEGER" property="sort" />
   </resultMap>
+
+  <select id="queryAll" resultType="com.study.model.Resources">
+      	SELECT id,name,parentId,resUrl,resKey,type,sort
+		FROM resources
+		ORDER BY sort ASC
+  </select>
+
+    <select id="loadUserResources" parameterType="java.util.HashMap" resultType="com.study.model.Resources">
+        SELECT re.id,re.name,re.parentId,re.resUrl,re.resKey
+        FROM resources re LEFT JOIN role_resources rr
+        ON re.id = rr.resourcesId
+        LEFT JOIN user_role ur
+        ON rr.roleId =ur.roleId
+        WHERE ur.userId=#{userid}
+        <if test="type != null">
+            AND re.type= #{type}
+        </if>
+        ORDER BY re.sort ASC
+    </select>
 </mapper>

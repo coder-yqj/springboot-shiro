@@ -6,7 +6,12 @@
       WARNING - @mbg.generated
     -->
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="roleKey" jdbcType="VARCHAR" property="rolekey" />
     <result column="roleDesc" jdbcType="VARCHAR" property="roledesc" />
   </resultMap>
+
+  <select id="queryRoleListWithSelected" parameterType="int" resultType="com.study.model.Role">
+    SELECT r.id,r.roleDesc,
+    (CASE WHEN (SELECT ur.roleId FROM user_role ur WHERE ur.userId= #{id} AND ur.roleId = r.id) THEN 1 ELSE 0 END) AS selected
+    FROM role r
+  </select>
 </mapper>

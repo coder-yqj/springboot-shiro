@@ -8,7 +8,7 @@ public class UserRole {
     private Integer userid;
 
     @Column(name = "roleId")
-    private Integer roleid;
+    private String roleid;
 
     /**
      * @return userId
@@ -24,17 +24,11 @@ public class UserRole {
         this.userid = userid;
     }
 
-    /**
-     * @return roleId
-     */
-    public Integer getRoleid() {
+    public String getRoleid() {
         return roleid;
     }
 
-    /**
-     * @param roleid
-     */
-    public void setRoleid(Integer roleid) {
+    public void setRoleid(String roleid) {
         this.roleid = roleid;
     }
 }

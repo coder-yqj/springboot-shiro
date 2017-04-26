@@ -7,12 +7,10 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "roleKey")
-    private String rolekey;
-
     @Column(name = "roleDesc")
     private String roledesc;
 
+    private Integer selected;
     /**
      * @return id
      */
@@ -28,20 +26,6 @@ public class Role {
     }
 
     /**
-     * @return roleKey
-     */
-    public String getRolekey() {
-        return rolekey;
-    }
-
-    /**
-     * @param rolekey
-     */
-    public void setRolekey(String rolekey) {
-        this.rolekey = rolekey;
-    }
-
-    /**
      * @return roleDesc
      */
     public String getRoledesc() {
@@ -53,5 +37,13 @@ public class Role {
      */
     public void setRoledesc(String roledesc) {
         this.roledesc = roledesc;
+    }
+
+    public Integer getSelected() {
+        return selected;
+    }
+
+    public void setSelected(Integer selected) {
+        this.selected = selected;
     }
 }

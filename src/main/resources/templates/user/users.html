@@ -243,17 +243,17 @@
             async:false,
             type : "POST",
             data:{uid:id},
-            url: '${ss}/role/roleListWithUser.do',
+            url: 'roles/rolesWithSelected',
             dataType:'json',
             success: function(data){
                 $("#boxRoleForm").empty();
-                var htm = "<input type='hidden' name='userId' value='"+id+"'>";
+                var htm = "<input type='hidden' name='userid' value='"+id+"'>";
                 for(var i=0;i<data.length;i++){
-                    htm += "<div class='checkbox'><label><input type='checkbox' name='roleId' value='"+data[i].id+"'";
+                    htm += "<div class='checkbox'><label><input type='checkbox' name='roleid' value='"+data[i].id+"'";
                     if(data[i].selected==1){
                         htm += " checked='checked'";
                     }
-                    htm +="/>"+data[i].roleDesc+"</label></div>";
+                    htm +="/>"+data[i].roledesc+"</label></div>";
                 }
                 $("#boxRoleForm").append(htm);
             }
@@ -268,7 +268,7 @@
         $.ajax({
             cache: true,
             type: "POST",
-            url:'${ss}/user/saveUserRoles.do',
+            url:'users/saveUserRoles',
             data:$('#boxRoleForm').serialize(),// 你的formid
             async: false,
             success: function(data) {
@@ -302,7 +302,7 @@
         $.ajax({
             cache: true,
             type: "POST",
-            url:'${ss}/user/addUser.do',
+            url:'users/add.do',
             data:$('#userForm').serialize(),// 你的formid
             async: false,
             dataType:"json",

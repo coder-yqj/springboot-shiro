@@ -1,25 +1,20 @@
-package com.study.config.shiro;
+package com.study.config;
 
-import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
 import com.study.model.Resources;
-import com.study.model.User;
 import com.study.service.ResourcesService;
-import com.study.service.UserService;
+import com.study.shiro.MyShiroRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
-import org.springframework.beans.factory.BeanFactory;
+import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.apache.shiro.mgt.SecurityManager;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 import tk.mybatis.mapper.entity.Example;
 
-import javax.annotation.Resource;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,11 +24,8 @@ import java.util.Map;
  */
 @Configuration
 public class ShiroConfig {
-    @Resource
+    @Autowired(required = false)
     private ResourcesService resourcesService;
-
-    @Resource
-    private UserService userService;
 
     /**
      * ShiroFilterFactoryBean 处理拦截资源文件问题。
@@ -72,18 +64,15 @@ public class ShiroConfig {
         //<!-- authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问-->
         filterChainDefinitionMap.put("/user", "authc");
         //自定义加载权限资源关系
-         /* List<Resources> resourcesList = resourcesService.selectByExample(new Example(Resources.class));*/
-      /*  PageInfo<Resources> pageInfo = resourcesService.selectByPage(new Resources(), 1, 20);*/
-        User user = userService.selectByUsername("admin");
-        System.out.println(user.getUsername()+"======");
-        /* for(Resources resources:resourcesList){
+        List<Resources> resourcesList = resourcesService.queryAll();
+         for(Resources resources:resourcesList){
 
             if (StringUtil.isNotEmpty(resources.getResurl())&& StringUtil.isNotEmpty(resources.getReskey())) {
                 String permission = "perms[" + resources.getReskey()+ "]";
                 System.out.println(resources.getResurl()+"---"+permission);
                 filterChainDefinitionMap.put(resources.getResurl(),permission);
             }
-        }*/
+        }
         filterChainDefinitionMap.put("/**", "authc");
 
 
@@ -136,16 +125,6 @@ public class ShiroConfig {
         AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
         authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
         return authorizationAttributeSourceAdvisor;
-    }
-
-    /**
-     * LifecycleBeanPostProcessor，这是个DestructionAwareBeanPostProcessor的子类，
-     * 负责org.apache.shiro.util.Initializable类型bean的生命周期的，初始化和销毁。
-     * 主要是AuthorizingRealm类的子类，以及EhCacheManager类。
-     */
-    @Bean(name = "lifecycleBeanPostProcessor")
-    public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
-        return new LifecycleBeanPostProcessor();
     }
 
 

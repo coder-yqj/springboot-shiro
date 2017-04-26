@@ -28,20 +28,15 @@ public class ResourcesController {
                                      @RequestParam(required = false, defaultValue = "1") int start,
                                      @RequestParam(required = false, defaultValue = "10") int length){
         Map<String,Object> map = new HashMap<>();
-        PageInfo<Resources> pageInfo = resourcesService.selectByPage(resources, start, length);
+       /* PageInfo<Resources> pageInfo = resourcesService.selectByPage(resources, start, length);
         System.out.println("pageInfo.getTotal():"+pageInfo.getTotal());
         map.put("draw",draw);
         map.put("recordsTotal",pageInfo.getTotal());
         map.put("recordsFiltered",pageInfo.getTotal());
-        map.put("data", pageInfo.getList());
+        map.put("data", pageInfo.getList());*/
         return map;
     }
 
-    @RequestMapping("/test")
-    public List<Resources> test(){
-        List<Resources> resourcesList = resourcesService.selectByExample(new Example(Resources.class));
-        System.out.println(resourcesList+"=========");
-        return resourcesList;
-    }
+
 
 }

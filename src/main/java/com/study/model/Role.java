@@ -9,7 +9,7 @@ public class Role {
 
     @Column(name = "roleDesc")
     private String roledesc;
-
+    @Transient
     private Integer selected;
     /**
      * @return id

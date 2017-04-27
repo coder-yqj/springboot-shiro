@@ -37,7 +37,7 @@
                         <h5>资源列表</h5>
                     </div>
                     <form class="form-inline">
-                        <button type="button" id="btn_search" onclick="$('#resourcesModal').modal();" class="btn btn-info" style="float: right; margin-right: 1;">新增</button>
+                        <button type="button" id="btn_search" onclick="$('#resourcesModal').modal();" class="btn btn-info" style="float: right; margin-right: 1px;">新增</button>
                     </form>
                     <table class="table table-bordered data-table" id="datatable" >
                         <thead>
@@ -94,30 +94,30 @@
             <div class="modal-body">
                 <form id="resourcesForm">
                     <div class="form-group">
-                        <label for="recipient-name" class="control-label">资源名称:</label>
+                        <label  class="control-label">资源名称:</label>
                         <input type="text" class="form-control" name="name" id="name" placeholder="请输入资源名称"/>
                     </div>
                     <div class="form-group">
-                        <label for="recipient-name" class="control-label">资源key:</label>
+                        <label  class="control-label">资源key:</label>
                         <input type="text" class="form-control" name="resKey" id="resKey" placeholder="请输入资源名称"/>
                     </div>
                     <div class="form-group">
-                        <label for="recipient-name" class="control-label">父资源ID:</label>
+                        <label  class="control-label">父资源ID:</label>
                         <input type="text" class="form-control" id="parentId" name="parentId"  placeholder="请输入父资源ID">
                     </div>
                     <div class="form-group">
-                        <label for="recipient-name" class="control-label">资源链接:</label>
+                        <label  class="control-label">资源链接:</label>
                         <input type="text" class="form-control" id="resUrl" name="resUrl"  placeholder="请输入资源链接">
                     </div>
                     <div class="form-group">
-                        <label for="recipient-name" class="control-label">资源类型:</label>
+                        <label  class="control-label">资源类型:</label>
                         <select class="form-control" name="type" id="type" >
                             <option value="1">菜单</option>
                             <option value="2">按钮</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="recipient-name" class="control-label">排序:</label>
+                        <label class="control-label">排序:</label>
                         <input type="text" class="form-control" id="sort" name="sort"  placeholder="请输入排序">
                     </div>
                 </form>

@@ -240,7 +240,6 @@
     //弹出选择角色的框
     function allotRole(id){
         $.ajax({
-            async:false,
             type : "POST",
             data:{uid:id},
             url: 'roles/rolesWithSelected',
@@ -302,10 +301,9 @@
         $.ajax({
             cache: true,
             type: "POST",
-            url:'users/add.do',
+            url:'users/add',
             data:$('#userForm').serialize(),// 你的formid
             async: false,
-            dataType:"json",
             success: function(data) {
                 if(data=="success"){
                     layer.msg('保存成功');
@@ -329,10 +327,8 @@
             $.ajax({
                 cache: true,
                 type: "POST",
-                url:'${ss}/user/delUser.do',
-                data:{id:id},
+                url:'users/delete/'+id,
                 async: false,
-                dataType:"json",
                 success: function(data) {
                     if(data=="success"){
                         layer.msg('删除成功');

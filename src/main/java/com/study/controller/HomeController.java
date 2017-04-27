@@ -52,6 +52,11 @@ public class HomeController {
         return "user/users";
     }
 
+    @RequestMapping("/rolesPage")
+    public String rolesPage(){
+        return "role/roles";
+    }
+
     @RequestMapping("/resourcesPage")
     public String resourcesPage(){
         return "resources/resources";

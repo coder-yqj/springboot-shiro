@@ -6,6 +6,7 @@ import com.study.model.UserRole;
 import com.study.service.UserRoleService;
 import com.study.service.UserService;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -71,6 +72,17 @@ public class UserController {
             e.printStackTrace();
             return "fail";
         }
+    }
+
+    @RequestMapping(value = "/delete/{id}")
+    public String delete(@PathVariable Integer id){
+      try{
+          userService.delete(id);
+          return "success";
+      }catch (Exception e){
+          e.printStackTrace();
+          return "fail";
+      }
     }
 
 }

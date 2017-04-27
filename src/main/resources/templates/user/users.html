@@ -327,7 +327,8 @@
             $.ajax({
                 cache: true,
                 type: "POST",
-                url:'users/delete/'+id,
+                url:'users/delete',
+                data:{id:id},
                 async: false,
                 success: function(data) {
                     if(data=="success"){

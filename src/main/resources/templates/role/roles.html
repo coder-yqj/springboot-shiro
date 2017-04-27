@@ -112,7 +112,7 @@
 </div>
 <!--end-Footer-part-->
 <script type="text/javascript" th:src="@{/js/jquery-1.11.2.min.js}"></script>
-<script th:src="@{/js/bootstrap.min.js}" th:sr></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
 <script th:src="@{/js/jquery.dataTables.min.js}"></script>
 <script th:src="@{/js/layer.js}"></script>
 <script type="text/javascript" th:src="@{/js/jquery.ztree.core.js}"></script>
@@ -251,7 +251,8 @@
             $.ajax({
                 cache: true,
                 type: "POST",
-                url:'roles/delete/'+id,
+                url:'roles/delete',
+                data:{id:id},
                 async: false,
                 success: function(data) {
                     if(data=="success"){

@@ -3,6 +3,7 @@ package com.study.controller;
 import com.github.pagehelper.PageInfo;
 import com.study.model.Resources;
 import com.study.service.ResourcesService;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,4 +43,13 @@ public class ResourcesController {
         return resourcesService.queryResourcesListWithSelected(rid);
     }
 
+    @RequestMapping("/loadMenu")
+    public List<Resources> loadMenu(){
+        Map<String,Object> map = new HashMap<>();
+        Integer userid = (Integer) SecurityUtils.getSubject().getSession().getAttribute("userSessionId");
+        map.put("type",1);
+        map.put("userid",userid);
+        List<Resources> resourcesList = resourcesService.loadUserResources(map);
+        return resourcesList;
+    }
 }

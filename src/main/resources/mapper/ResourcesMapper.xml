@@ -30,6 +30,7 @@
         <if test="type != null">
             AND re.type= #{type}
         </if>
+        GROUP BY re.id
         ORDER BY re.sort ASC
     </select>
 

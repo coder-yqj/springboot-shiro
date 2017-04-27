@@ -47,6 +47,7 @@ public class RoleController {
         return roleService.queryRoleListWithSelected(uid);
     }
 
+    //分配角色
     @RequestMapping("/saveRoleResources")
     public String saveRoleResources(RoleResources roleResources){
         if(StringUtils.isEmpty(roleResources.getRoleid()))
@@ -71,8 +72,8 @@ public class RoleController {
         }
     }
 
-    @RequestMapping(value = "/delete/{id}")
-    public String delete(@PathVariable Integer id){
+    @RequestMapping(value = "/delete")
+    public String delete(Integer id){
         try{
             roleService.delete(id);
             return "success";

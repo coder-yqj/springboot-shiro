@@ -74,8 +74,8 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/delete/{id}")
-    public String delete(@PathVariable Integer id){
+    @RequestMapping(value = "/delete")
+    public String delete(Integer id){
       try{
           userService.delete(id);
           return "success";

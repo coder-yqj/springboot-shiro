@@ -26,8 +26,8 @@ public class RoleServiceImpl extends BaseService<Role> implements RoleService{
     private RoleMapper roleMapper;
 
     @Override
-    public List<Role> queryRoleListWithSelected(Integer id) {
-        return roleMapper.queryRoleListWithSelected(id);
+    public List<Role> queryRoleListWithSelected(Integer uid) {
+        return roleMapper.queryRoleListWithSelected(uid);
     }
 
     @Override

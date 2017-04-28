@@ -41,4 +41,9 @@ public class ResourcesServiceImpl extends BaseService<Resources> implements Reso
     public List<Resources> loadUserResources(Map<String, Object> map) {
         return resourcesMapper.loadUserResources(map);
     }
+
+    @Override
+    public List<Resources> queryResourcesListWithSelected(Integer rid) {
+        return resourcesMapper.queryResourcesListWithSelected(rid);
+    }
 }

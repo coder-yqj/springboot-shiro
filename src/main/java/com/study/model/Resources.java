@@ -39,6 +39,8 @@ public class Resources {
      */
     private Integer sort;
 
+    @Transient
+    private String checked;//是否选中
     /**
      * @return id
      */
@@ -159,6 +161,14 @@ public class Resources {
      */
     public void setSort(Integer sort) {
         this.sort = sort;
+    }
+
+    public String getChecked() {
+        return checked;
+    }
+
+    public void setChecked(String checked) {
+        this.checked = checked;
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.study.service.UserRoleService;
 import com.study.service.UserService;
 import com.study.util.PasswordHelper;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -75,6 +76,17 @@ public class UserController {
             e.printStackTrace();
             return "fail";
         }
+    }
+
+    @RequestMapping(value = "/delete")
+    public String delete(Integer id){
+      try{
+          userService.delete(id);
+          return "success";
+      }catch (Exception e){
+          e.printStackTrace();
+          return "fail";
+      }
     }
 
 }

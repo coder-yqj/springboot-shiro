@@ -3,6 +3,7 @@ package com.study.controller;
 import com.github.pagehelper.PageInfo;
 import com.study.model.Resources;
 import com.study.service.ResourcesService;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,15 +29,27 @@ public class ResourcesController {
                                      @RequestParam(required = false, defaultValue = "1") int start,
                                      @RequestParam(required = false, defaultValue = "10") int length){
         Map<String,Object> map = new HashMap<>();
-       /* PageInfo<Resources> pageInfo = resourcesService.selectByPage(resources, start, length);
+        PageInfo<Resources> pageInfo = resourcesService.selectByPage(resources, start, length);
         System.out.println("pageInfo.getTotal():"+pageInfo.getTotal());
         map.put("draw",draw);
         map.put("recordsTotal",pageInfo.getTotal());
         map.put("recordsFiltered",pageInfo.getTotal());
-        map.put("data", pageInfo.getList());*/
+        map.put("data", pageInfo.getList());
         return map;
     }
 
+    @RequestMapping("/resourcesWithSelected")
+    public List<Resources> resourcesWithSelected(Integer rid){
+        return resourcesService.queryResourcesListWithSelected(rid);
+    }
 
-
+    @RequestMapping("/loadMenu")
+    public List<Resources> loadMenu(){
+        Map<String,Object> map = new HashMap<>();
+        Integer userid = (Integer) SecurityUtils.getSubject().getSession().getAttribute("userSessionId");
+        map.put("type",1);
+        map.put("userid",userid);
+        List<Resources> resourcesList = resourcesService.loadUserResources(map);
+        return resourcesList;
+    }
 }

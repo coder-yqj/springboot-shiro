@@ -7,8 +7,9 @@
     <link rel="stylesheet" th:href="@{/css/jquery.dataTables.min.css}" />
     <link rel="stylesheet" th:href="@{/css/matrix-style.css}" />
     <link rel="stylesheet" th:href="@{/css/matrix-media.css}" />
+    <link rel="stylesheet" th:href="@{/css/metroStyle.css}" type="text/css">
     <link th:href="@{/font-awesome/css/font-awesome.css}" rel="stylesheet" />
-    <title>资源管理</title>
+    <title>角色管理</title>
 </head>
 <body>
 
@@ -43,7 +44,6 @@
                             <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>角色key</th>
                                 <th>角色名称</th>
                                 <th>操作</th>
                             </tr>
@@ -91,11 +91,7 @@
                 <form id="roleForm">
                     <div class="form-group">
                         <label class="control-label">角色名称:</label>
-                        <input type="text" class="form-control" name="roleDesc" id="roleDesc" placeholder="请输入角色名称"/>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">角色key:</label>
-                        <input type="text" class="form-control" id="roleKey" name="roleKey"  placeholder="请输入角色key">
+                        <input type="text" class="form-control" name="roledesc" id="roleDesc" placeholder="请输入角色名称"/>
                     </div>
                 </form>
             </div>
@@ -115,17 +111,15 @@
     <div id="footer" class="span12"> 2017 &copy; yqj <a href="http://themedesigner.in/">Themedesigner.in</a> </div>
 </div>
 <!--end-Footer-part-->
-<script src="${ss }/js/jquery-1.11.2.min.js"></script>
-<script src="${ss }/js/bootstrap.min.js"></script>
-<script src="${ss }/js/jquery.dataTables.min.js"></script>
-<script src="${ss }/js/layer.js"></script>
-<script type="text/javascript" src="${ss }/js/jquery.ztree.core.js"></script>
-<script type="text/javascript" src="${ss }/js/jquery.ztree.excheck.js"></script>
+<script type="text/javascript" th:src="@{/js/jquery-1.11.2.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/jquery.dataTables.min.js}"></script>
+<script th:src="@{/js/layer.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.ztree.core.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery.ztree.excheck.js}"></script>
 
 <script type="text/javascript">
     //_csrf参数设置
-    var header = $("meta[name='_csrf_header']").attr("content");
-    var token = $("meta[name='_csrf']").attr("content");
     var table;
     $(document).ready(function() {
         table = $('#datatable').DataTable( {
@@ -136,15 +130,14 @@
             "serverSide": true,//开启服务器模式，使用服务器端处理配置datatable
             "processing": true,//开启读取服务器数据时显示正在加载中……特别是大数据量的时候，开启此功能比较好
 
-            "ajax": '${ss}/role/roleList.do',
+            "ajax": 'roles',
             "columns": [
                 { "data": "id" },
-                { "data": "roleKey" },
-                { "data": "roleDesc" },
+                { "data": "roledesc" },
                 {data: null}
             ],
             columnDefs:[{
-                targets: 3,
+                targets: 2,
                 render: function (data, type, row, meta) {
                     return '<p><a type="button" class="btn btn-danger  btn-default" href="javascrip:;" onclick=delById(' + row.id + ') >删除</a>'+
                     '<a type="button" class="btn btn-success btn-default" href="javascrip:;" onclick=allotResources(' + row.id + ') >分配权限</a></p>';
@@ -152,7 +145,6 @@
             },
                 { "orderable": false, "targets": 0 },
                 { "orderable": false, "targets": 1 },
-                { "orderable": false, "targets": 2 },
             ],
 
         } );
@@ -177,7 +169,7 @@
                 simpleData: {
                     enable: true,
                     idKey: "id",
-                    pIdKey: "parentId",
+                    pIdKey: "parentid",
                 }
             }
         };
@@ -186,11 +178,8 @@
             async:false,
             type : "POST",
             data:{rid:rid},
-            url: "${ss}/resources/resourcesListWithRole.do",
+            url: "resources/resourcesWithSelected",
             dataType:'json',
-            beforeSend: function(xhr){
-                xhr.setRequestHeader(header, token);
-            },
             success: function(data){
 
                 $.fn.zTree.init($("#treeDemo"), setting, data);
@@ -213,12 +202,8 @@
         $.ajax({
             async:false,
             type : "POST",
-            data:{roleId:roleId,resourcesId:ids.join(",")},
-            url: "${ss}/role/saveRoleResources.do",
-            dataType:'json',
-            beforeSend: function(xhr){
-                xhr.setRequestHeader(header, token);
-            },
+            data:{roleid:roleId,resourcesid:ids.join(",")},
+            url: "roles/saveRoleResources",
             success: function(data){
                 if(data=="success"){
                     layer.msg('保存成功');
@@ -232,13 +217,7 @@
     }
     //添加用户
     function addRole() {
-        var roleKey = $("#roleKey").val();
         var roleDesc = $("#roleDesc").val();
-        if(roleKey == "" || roleKey == undefined || roleKey == null){
-            return layer.msg('角色key不能为空', function(){
-                //关闭后的操作
-            });
-        }
         if(roleDesc == "" || roleDesc == undefined || roleDesc == null){
             return layer.msg('角色名称不能为空', function(){
                 //关闭后的操作
@@ -248,13 +227,9 @@
         $.ajax({
             cache: true,
             type: "POST",
-            url:'${ss}/role/addRole.do',
+            url:'roles/add',
             data:$('#roleForm').serialize(),// 你的formid
             async: false,
-            dataType:"json",
-            beforeSend: function(xhr){
-                xhr.setRequestHeader(header, token);
-            },
             success: function(data) {
                 if(data=="success"){
                     layer.msg('保存成功');
@@ -276,13 +251,9 @@
             $.ajax({
                 cache: true,
                 type: "POST",
-                url:'${ss}/role/delRole.do',
+                url:'roles/delete',
                 data:{id:id},
                 async: false,
-                dataType:"json",
-                beforeSend: function(xhr){
-                    xhr.setRequestHeader(header, token);
-                },
                 success: function(data) {
                     if(data=="success"){
                         layer.msg('删除成功');

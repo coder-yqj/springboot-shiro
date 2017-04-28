@@ -302,10 +302,9 @@
         $.ajax({
             cache: true,
             type: "POST",
-            url:'users/add.do',
+            url:'users/add',
             data:$('#userForm').serialize(),// 你的formid
             async: false,
-            dataType:"json",
             success: function(data) {
                 if(data=="success"){
                     layer.msg('保存成功');
@@ -329,7 +328,7 @@
             $.ajax({
                 cache: true,
                 type: "POST",
-                url:'${ss}/user/delUser.do',
+                url:'${ss}/user/delUser',
                 data:{id:id},
                 async: false,
                 dataType:"json",

@@ -5,6 +5,7 @@ import com.study.model.User;
 import com.study.model.UserRole;
 import com.study.service.UserRoleService;
 import com.study.service.UserService;
+import com.study.util.PasswordHelper;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -65,6 +66,9 @@ public class UserController {
         if(u != null)
             return "error";
         try {
+            user.setEnable(1);
+            PasswordHelper passwordHelper = new PasswordHelper();
+            passwordHelper.encryptPassword(user);
             userService.save(user);
             return "success";
         } catch (Exception e) {

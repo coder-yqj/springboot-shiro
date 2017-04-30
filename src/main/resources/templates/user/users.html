@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -54,26 +54,23 @@
                             </select>
                         </div>
                         <button type="button"  onclick="search();" class="btn btn-primary">查询</button>
-                            <button type="button"  onclick="$('#addUser').modal();" class="btn btn-info" style="float: right; margin-right: 1px;">新增</button>
+                        <button shiro:hasPermission="/users/add" type="button"  onclick="$('#addUser').modal();" class="btn btn-info" style="float: right; margin-right: 1px;">新增</button>
+                        <button shiro:hasPermission="/users/delete" type="button"  onclick="delByID();" class="btn btn-info" style="float: right; margin-right: 1px;">删除</button>
+                        <button shiro:hasPermission="/users/saveUserRoles" type="button"  onclick="allotRole();" class="btn btn-info" style="float: right; margin-right: 1px;">分配角色</button>
                     </form>
 
                     <div class="widget-content nopadding">
                         <table class="table table-striped table-bordered" cellspacing="0" width="100%" id="datatable" >
                             <thead>
                             <tr>
+                                <th>
+                                    <input type="checkbox" class="checkall" />
+                                </th>
                                 <th>ID</th>
                                 <th>用户名</th>
                                 <th>是否启用</th>
-                                <th>操作</th>
                             </tr>
                             </thead>
-                            <!--  <tfoot>
-                               <tr>
-                                 <th>ID</th>
-                                 <th>用户名</th>
-                                 <th>是否启用</th>
-                               </tr>
-                           </tfoot> -->
                         </table>
 
                     </div>
@@ -151,6 +148,10 @@
 <script th:src="@{/js/jquery.dataTables.min.js}"></script>
 <script th:src="@{/js/layer.js}"></script>
 <script type="text/javascript">
+    $(".checkall").click(function () {
+        var check = $(this).prop("checked");
+        $(".checkchild").prop("checked", check);
+    });
     var table;
     $(document).ready(function() {
         table = $('#datatable').DataTable( {
@@ -188,20 +189,21 @@
                 });
             },
             "columns": [
+                {
+                    "sClass": "text-center",
+                    "data": "id",
+                    "render": function (data, type, full, meta) {
+                        return '<input type="checkbox"  class="checkchild"  value="' + data + '" />';
+                    },
+                    "bSortable": false
+                },
                 { "data": "id" },
                 { "data": "username" },
                 { "data": "enable" },
-                {data: null}
             ],
-            columnDefs:[{
-                targets: 3,
-                render: function (data, type, row, meta) {
-                    return '<p><a type="button" class="btn btn-danger  btn-default" href="javascrip:;" onclick=delByID(' + row.id + ') >删除</a> '+
-                    '<a type="button" class="btn btn-success btn-default" href="javascrip:;" onclick=allotRole(' + row.id + ') >分配角色</a></p>';
-                }
-            },
-                { "orderable": false, "targets": 0 },
+            columnDefs:[
                 { "orderable": false, "targets": 1 },
+                { "orderable": false, "targets": 2 },
                 {
                     "orderable": false,
                     "render": function(data, type, row) {
@@ -211,7 +213,7 @@
                             return "关闭";
                         }
                     },
-                    "targets": 2
+                    "targets": 3
                 },
             ],
 
@@ -238,7 +240,18 @@
         return param;
     }
     //弹出选择角色的框
-    function allotRole(id){
+    function allotRole(){
+        var id = $(".checkchild:checked").val();
+        if ($(".checkchild:checked").length < 1)
+        {
+            layer.msg('请选择一条数据');
+            return;
+        }
+        if ($(".checkchild:checked").length > 1)
+        {
+            layer.msg('一次只能修改一条数据');
+            return;
+        }
         $.ajax({
             async:false,
             type : "POST",
@@ -264,7 +277,6 @@
 
     //保存角色的选择
     function saveUserRoles() {
-
         $.ajax({
             cache: true,
             type: "POST",
@@ -321,17 +333,27 @@
         });
     }
 
-    function delByID(id) {
+    function delByID() {
+        var id = $(".checkchild:checked").val();
+        if ($(".checkchild:checked").length < 1)
+        {
+            layer.msg('请选择一条数据');
+            return;
+        }
+        if ($(".checkchild:checked").length > 1)
+        {
+            layer.msg('一次只能修改一条数据');
+            return;
+        }
         layer.confirm('您确定要删除该用户吗？', {
             btn: ['确认','取消'] //按钮
         }, function(){
             $.ajax({
                 cache: true,
                 type: "POST",
-                url:'${ss}/user/delUser',
+                url:'users/delete',
                 data:{id:id},
                 async: false,
-                dataType:"json",
                 success: function(data) {
                     if(data=="success"){
                         layer.msg('删除成功');

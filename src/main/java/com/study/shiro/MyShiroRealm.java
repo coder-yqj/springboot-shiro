@@ -40,7 +40,7 @@ public class MyShiroRealm extends AuthorizingRealm {
         // 权限信息对象info,用来存放查出的用户的所有的角色（role）及权限（permission）
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         for(Resources resources: resourcesList){
-            info.addStringPermission(resources.getReskey());
+            info.addStringPermission(resources.getResurl());
         }
         return info;
     }

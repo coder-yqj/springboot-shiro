@@ -20,8 +20,8 @@ public class PasswordHelper {
 	public static void main(String[] args) {
 		PasswordHelper passwordHelper = new PasswordHelper();
 		User user = new User();
-		user.setUsername("admin");
-		user.setPassword("admin");
+		user.setUsername("user1");
+		user.setPassword("user1");
 		passwordHelper.encryptPassword(user);
 		System.out.println(user);
 	}

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -37,19 +37,21 @@
                         <h5>资源列表</h5>
                     </div>
                     <form class="form-inline">
-                        <button type="button" id="btn_search" onclick="$('#resourcesModal').modal();" class="btn btn-info" style="float: right; margin-right: 1px;">新增</button>
-                    </form>
+                        <button type="button" shiro:hasPermission="/resources/add" onclick="$('#resourcesModal').modal();" class="btn btn-info" style="float: right; margin-right: 1px;">新增</button>
+                        <button type="button" shiro:hasPermission="/resources/delete" onclick="delById();" class="btn btn-info" style="float: right; margin-right: 1px;">删除</button>
+                        </form>
                     <table class="table table-bordered data-table" id="datatable" >
                         <thead>
                         <tr>
+                            <th>
+                                <input type="checkbox" class="checkall" />
+                            </th>
                             <th>ID</th>
                             <th>资源名称</th>
-                            <th>资源key</th>
                             <th>父资源</th>
                             <th>资源链接</th>
                             <th>资源类型</th>
                             <th>排序</th>
-                            <th>操作</th>
                         </tr>
                         </thead>
                     </table>
@@ -98,16 +100,12 @@
                         <input type="text" class="form-control" name="name" id="name" placeholder="请输入资源名称"/>
                     </div>
                     <div class="form-group">
-                        <label  class="control-label">资源key:</label>
-                        <input type="text" class="form-control" name="resKey" id="resKey" placeholder="请输入资源名称"/>
-                    </div>
-                    <div class="form-group">
                         <label  class="control-label">父资源ID:</label>
-                        <input type="text" class="form-control" id="parentId" name="parentId"  placeholder="请输入父资源ID">
+                        <input type="text" class="form-control" id="parentId" name="parentid"  placeholder="请输入父资源ID">
                     </div>
                     <div class="form-group">
                         <label  class="control-label">资源链接:</label>
-                        <input type="text" class="form-control" id="resUrl" name="resUrl"  placeholder="请输入资源链接">
+                        <input type="text" class="form-control" id="resUrl" name="resurl"  placeholder="请输入资源链接">
                     </div>
                     <div class="form-group">
                         <label  class="control-label">资源类型:</label>
@@ -144,6 +142,10 @@
 <script th:src="@{/js/layer.js}"></script>
 <script type="text/javascript">
     var table;
+    $(".checkall").click(function () {
+        var check = $(this).prop("checked");
+        $(".checkchild").prop("checked", check);
+    });
     $(document).ready(function() {
         table = $('#datatable').DataTable( {
             "dom": '<"top"i>rt<"bottom"flp><"clear">',
@@ -155,23 +157,22 @@
 
             "ajax": 'resources',
             "columns": [
+                {
+                    "sClass": "text-center",
+                    "data": "id",
+                    "render": function (data, type, full, meta) {
+                        return '<input type="checkbox"  class="checkchild"  value="' + data + '" />';
+                    },
+                    "bSortable": false
+                },
                 { "data": "id" },
                 { "data": "name" },
-                { "data": "reskey" },
                 { "data": "parentid" },
                 { "data": "resurl" },
                 { "data": "type" },
                 { "data": "sort" },
-                {data: null}
             ],
-            columnDefs:[{
-                targets: 7,
-                render: function (data, type, row, meta) {
-                    return '<p><a type="button" class="btn btn-danger  btn-default" href="javascrip:;" onclick=delById(' + row.id + ') >删除</a>'+
-                    '<a type="button" class="btn btn-success btn-default" href="javascrip:;" onclick=allotResources(' + row.id + ') >修改</a></p>';
-                }
-            },
-                { "orderable": false, "targets": 0 },
+            columnDefs:[
                 { "orderable": false, "targets": 1 },
                 { "orderable": false, "targets": 2 },
                 { "orderable": false, "targets": 3 },
@@ -205,18 +206,12 @@
     //添加用户
     function addResources() {
         var name = $("#name").val();
-        var resKey= $("#resKey").val();
         var parentId = $("#parentId").val();
         var resUrl = $("#resUrl").val();
         var sort = $("#sort").val();
 
         if(name == "" || name == undefined || name == null){
             return layer.msg('资源名称不能为空', function(){
-                //关闭后的操作
-            });
-        }
-        if(resKey == "" || resKey == undefined || resKey == null){
-            return layer.msg('资源key不能为空', function(){
                 //关闭后的操作
             });
         }
@@ -239,10 +234,9 @@
         $.ajax({
             cache: true,
             type: "POST",
-            url:'${ss}/resources/addResources.do',
+            url:'resources/add',
             data:$('#resourcesForm').serialize(),// 你的formid
             async: false,
-            dataType:"json",
             success: function(data) {
                 if(data=="success"){
                     layer.msg('保存成功');
@@ -256,17 +250,27 @@
         });
     }
 
-    function delById(id) {
+    function delById() {
+        var id = $(".checkchild:checked").val();
+        if ($(".checkchild:checked").length < 1)
+        {
+            layer.msg('请选择一条数据');
+            return;
+        }
+        if ($(".checkchild:checked").length > 1)
+        {
+            layer.msg('一次只能修改一条数据');
+            return;
+        }
         layer.confirm('您确定要删除该资源吗？', {
             btn: ['确认','取消'] //按钮
         }, function(){
             $.ajax({
                 cache: true,
                 type: "POST",
-                url:'${ss}/resources/delResources.do',
+                url:'resources/delete',
                 data:{id:id},
                 async: false,
-                dataType:"json",
                 success: function(data) {
                     if(data=="success"){
                         layer.msg('删除成功');

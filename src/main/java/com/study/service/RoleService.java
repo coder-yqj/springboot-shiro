@@ -11,5 +11,9 @@ public interface RoleService extends IService<Role> {
 
     PageInfo<Role> selectByPage(Role role, int start, int length);
 
-
+    /**
+     * 删除角色 同时删除角色资源表中的数据
+     * @param roleid
+     */
+    public void delRole(Integer roleid);
 }

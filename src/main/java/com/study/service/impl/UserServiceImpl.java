@@ -2,12 +2,18 @@ package com.study.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.study.mapper.ResourcesMapper;
+import com.study.mapper.UserRoleMapper;
 import com.study.model.User;
+import com.study.model.UserRole;
 import com.study.service.UserService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.util.StringUtil;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -15,6 +21,8 @@ import java.util.List;
  */
 @Service("userService")
 public class UserServiceImpl extends BaseService<User> implements UserService{
+    @Resource
+    private UserRoleMapper userRoleMapper;
 
     @Override
     public PageInfo<User> selectByPage(User user, int start, int length) {
@@ -46,5 +54,17 @@ public class UserServiceImpl extends BaseService<User> implements UserService{
             return userList.get(0);
         }
             return null;
+    }
+
+    @Override
+    @Transactional(propagation= Propagation.REQUIRED,readOnly=false,rollbackFor={Exception.class})
+    public void delUser(Integer userid) {
+        //删除用户表
+        mapper.deleteByPrimaryKey(userid);
+        //删除用户角色表
+        Example example = new Example(UserRole.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("userid",userid);
+        userRoleMapper.deleteByExample(example);
     }
 }

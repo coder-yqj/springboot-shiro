@@ -75,12 +75,14 @@ public class RoleController {
     @RequestMapping(value = "/delete")
     public String delete(Integer id){
         try{
-            roleService.delete(id);
+            roleService.delRole(id);
             return "success";
         }catch (Exception e){
             e.printStackTrace();
             return "fail";
         }
     }
+
+
 
 }

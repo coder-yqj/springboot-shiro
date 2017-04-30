@@ -3,6 +3,7 @@ package com.study.controller;
 import com.github.pagehelper.PageInfo;
 import com.study.model.Resources;
 import com.study.service.ResourcesService;
+import com.study.shiro.ShiroService;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,6 +24,8 @@ public class ResourcesController {
 
     @Resource
     private ResourcesService resourcesService;
+    @Resource
+    private ShiroService shiroService;
 
     @RequestMapping
     public Map<String,Object> getAll(Resources resources, String draw,
@@ -51,5 +54,31 @@ public class ResourcesController {
         map.put("userid",userid);
         List<Resources> resourcesList = resourcesService.loadUserResources(map);
         return resourcesList;
+    }
+
+    @RequestMapping(value = "/add")
+    public String add(Resources resources){
+        try{
+            resourcesService.save(resources);
+            //更新权限
+            shiroService.updatePermission();
+            return "success";
+        }catch (Exception e){
+            e.printStackTrace();
+            return "fail";
+        }
+    }
+
+    @RequestMapping(value = "/delete")
+    public String delete(Integer id){
+        try{
+            resourcesService.delete(id);
+            //更新权限
+            shiroService.updatePermission();
+            return "success";
+        }catch (Exception e){
+            e.printStackTrace();
+            return "fail";
+        }
     }
 }

@@ -7,7 +7,6 @@
     -->
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="resKey" jdbcType="VARCHAR" property="reskey" />
     <result column="resUrl" jdbcType="VARCHAR" property="resurl" />
     <result column="type" jdbcType="INTEGER" property="type" />
     <result column="parentId" jdbcType="INTEGER" property="parentid" />
@@ -15,13 +14,13 @@
   </resultMap>
 
   <select id="queryAll" resultType="com.study.model.Resources">
-      	SELECT id,name,parentId,resUrl,resKey,type,sort
+      	SELECT id,name,parentId,resUrl,type,sort
 		FROM resources
 		ORDER BY sort ASC
   </select>
 
     <select id="loadUserResources" parameterType="java.util.HashMap" resultType="com.study.model.Resources">
-        SELECT re.id,re.name,re.parentId,re.resUrl,re.resKey
+        SELECT re.id,re.name,re.parentId,re.resUrl
         FROM resources re LEFT JOIN role_resources rr
         ON re.id = rr.resourcesId
         LEFT JOIN user_role ur
@@ -35,7 +34,7 @@
     </select>
 
     <select id="queryResourcesListWithSelected" parameterType="int" resultType="com.study.model.Resources">
-        SELECT re.id,re.name,re.parentId,re.resUrl,re.type,re.resKey,
+        SELECT re.id,re.name,re.parentId,re.resUrl,re.type,
 		(CASE WHEN EXISTS(SELECT 1
 		FROM role_resources rr WHERE rr.resourcesId=re.id AND rr.roleId=#{rid})
 		THEN 'true' ELSE 'false' END) AS checked

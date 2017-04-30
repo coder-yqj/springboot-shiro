@@ -11,11 +11,6 @@ public class Resources {
      */
     private String name;
 
-    /**
-     * 资源key
-     */
-    @Column(name = "resKey")
-    private String reskey;
 
     /**
      * 资源url
@@ -73,23 +68,6 @@ public class Resources {
         this.name = name;
     }
 
-    /**
-     * 获取资源key
-     *
-     * @return resKey - 资源key
-     */
-    public String getReskey() {
-        return reskey;
-    }
-
-    /**
-     * 设置资源key
-     *
-     * @param reskey 资源key
-     */
-    public void setReskey(String reskey) {
-        this.reskey = reskey;
-    }
 
     /**
      * 获取资源url
@@ -176,7 +154,6 @@ public class Resources {
         return "Resources{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", reskey='" + reskey + '\'' +
                 ", resurl='" + resurl + '\'' +
                 ", type=" + type +
                 ", parentid=" + parentid +

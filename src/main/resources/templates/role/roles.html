@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -37,15 +37,19 @@
                         <h5>角色列表</h5>
                     </div>
                     <form class="form-inline">
-                        <button type="button" id="btn_search" onclick="$('#addRole').modal();" class="btn btn-info" style="float: right; margin-right: 1px;">新增</button>
+                        <button type="button" shiro:hasPermission="/roles/add" onclick="$('#addRole').modal();" class="btn btn-info" style="float: right; margin-right: 1px;">新增</button>
+                        <button type="button" shiro:hasPermission="/roles/delete" onclick="delById();" class="btn btn-info" style="float: right; margin-right: 1px;">删除</button>
+                        <button type="button" shiro:hasPermission="/roles/saveRoleResources" onclick="allotResources();" class="btn btn-info" style="float: right; margin-right: 1px;">分配权限</button>
                     </form>
                     <div class="widget-content nopadding">
                         <table class="table table-bordered data-table" id="datatable" >
                             <thead>
                             <tr>
+                                <th>
+                                    <input type="checkbox" class="checkall" />
+                                </th>
                                 <th>ID</th>
                                 <th>角色名称</th>
-                                <th>操作</th>
                             </tr>
                             </thead>
                         </table>
@@ -119,7 +123,10 @@
 <script type="text/javascript" th:src="@{/js/jquery.ztree.excheck.js}"></script>
 
 <script type="text/javascript">
-    //_csrf参数设置
+    $(".checkall").click(function () {
+        var check = $(this).prop("checked");
+        $(".checkchild").prop("checked", check);
+    });
     var table;
     $(document).ready(function() {
         table = $('#datatable').DataTable( {
@@ -132,19 +139,20 @@
 
             "ajax": 'roles',
             "columns": [
+                {
+                    "sClass": "text-center",
+                    "data": "id",
+                    "render": function (data, type, full, meta) {
+                        return '<input type="checkbox"  class="checkchild"  value="' + data + '" />';
+                    },
+                    "bSortable": false
+                },
                 { "data": "id" },
                 { "data": "roledesc" },
-                {data: null}
             ],
-            columnDefs:[{
-                targets: 2,
-                render: function (data, type, row, meta) {
-                    return '<p><a type="button" class="btn btn-danger  btn-default" href="javascrip:;" onclick=delById(' + row.id + ') >删除</a>'+
-                    '<a type="button" class="btn btn-success btn-default" href="javascrip:;" onclick=allotResources(' + row.id + ') >分配权限</a></p>';
-                }
-            },
-                { "orderable": false, "targets": 0 },
+            columnDefs:[
                 { "orderable": false, "targets": 1 },
+                { "orderable": false, "targets": 2 },
             ],
 
         } );
@@ -158,7 +166,18 @@
     }
     //弹出选择角色的框
     var roleId;
-    function allotResources(rid){
+    function allotResources(){
+        var rid = $(".checkchild:checked").val();
+        if ($(".checkchild:checked").length < 1)
+        {
+            layer.msg('请选择一条数据');
+            return;
+        }
+        if ($(".checkchild:checked").length > 1)
+        {
+            layer.msg('一次只能修改一条数据');
+            return;
+        }
         roleId = rid;
         var setting = {
             check: {
@@ -244,7 +263,18 @@
     }
 
 
-    function delById(id) {
+    function delById() {
+        var id = $(".checkchild:checked").val();
+        if ($(".checkchild:checked").length < 1)
+        {
+            layer.msg('请选择一条数据');
+            return;
+        }
+        if ($(".checkchild:checked").length > 1)
+        {
+            layer.msg('一次只能修改一条数据');
+            return;
+        }
         layer.confirm('您确定要删除该角色吗？', {
             btn: ['确认','取消'] //按钮
         }, function(){

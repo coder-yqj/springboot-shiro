@@ -12,4 +12,6 @@ public interface UserService extends IService<User>{
 
     User selectByUsername(String username);
 
+    void delUser(Integer userid);
+
 }

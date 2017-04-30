@@ -81,7 +81,7 @@ public class UserController {
     @RequestMapping(value = "/delete")
     public String delete(Integer id){
       try{
-          userService.delete(id);
+          userService.delUser(id);
           return "success";
       }catch (Exception e){
           e.printStackTrace();

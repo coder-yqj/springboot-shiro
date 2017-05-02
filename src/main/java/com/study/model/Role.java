@@ -1,8 +1,10 @@
 package com.study.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
-public class Role {
+public class Role implements Serializable{
+    private static final long serialVersionUID = -6140090613812307452L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

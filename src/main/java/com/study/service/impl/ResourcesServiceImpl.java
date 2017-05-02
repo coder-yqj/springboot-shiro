@@ -7,6 +7,8 @@ import com.study.mapper.ResourcesMapper;
 import com.study.model.Resources;
 import com.study.model.User;
 import com.study.service.ResourcesService;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
@@ -38,6 +40,7 @@ public class ResourcesServiceImpl extends BaseService<Resources> implements Reso
     }
 
     @Override
+    @Cacheable(cacheNames="resources",key="#map['userid'].toString()+#map['type']")
     public List<Resources> loadUserResources(Map<String, Object> map) {
         return resourcesMapper.loadUserResources(map);
     }

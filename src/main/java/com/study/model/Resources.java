@@ -1,7 +1,10 @@
 package com.study.model;
 
 import javax.persistence.*;
-public class Resources {
+import java.io.Serializable;
+
+public class Resources implements Serializable{
+    private static final long serialVersionUID = -6812242071705361506L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

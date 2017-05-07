@@ -11,6 +11,7 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import tk.mybatis.mapper.entity.Example;
 
@@ -56,7 +57,7 @@ public class MyShiroRealm extends AuthorizingRealm {
             throw new LockedAccountException(); // 帐号锁定
         }
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
-                user, //用户名
+                user, //用户
                 user.getPassword(), //密码
                 ByteSource.Util.bytes(username),
                 getName()  //realm name
@@ -67,4 +68,15 @@ public class MyShiroRealm extends AuthorizingRealm {
         session.setAttribute("userSessionId", user.getId());
         return authenticationInfo;
     }
+
+    /**
+     * 指定principalCollection 清除
+     */
+    public void clearCachedAuthorizationInfo(PrincipalCollection principalCollection) {
+
+        SimplePrincipalCollection principals = new SimplePrincipalCollection(
+                principalCollection, getName());
+        super.clearCachedAuthorizationInfo(principals);
+    }
+
 }

@@ -8,4 +8,8 @@
     <result column="userId" jdbcType="INTEGER" property="userid" />
     <result column="roleId" jdbcType="INTEGER" property="roleid" />
   </resultMap>
+
+  <select id="findUserIdByRoleId" parameterType="int" resultType="int">
+    select userId from user_role where roleId =  #{roleId}
+  </select>
 </mapper>

@@ -5,6 +5,7 @@ import com.study.model.Resources;
 import com.study.service.ResourcesService;
 import com.study.shiro.ShiroService;
 import org.apache.shiro.SecurityUtils;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -56,6 +57,7 @@ public class ResourcesController {
         return resourcesList;
     }
 
+    @CacheEvict(cacheNames="resources", allEntries=true)
     @RequestMapping(value = "/add")
     public String add(Resources resources){
         try{
@@ -68,7 +70,7 @@ public class ResourcesController {
             return "fail";
         }
     }
-
+    @CacheEvict(cacheNames="resources", allEntries=true)
     @RequestMapping(value = "/delete")
     public String delete(Integer id){
         try{

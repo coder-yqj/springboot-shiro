@@ -7,6 +7,7 @@ import com.study.service.ResourcesService;
 import com.study.shiro.MyShiroRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
@@ -39,6 +40,11 @@ public class ShiroConfig {
 
     @Value("${spring.redis.timeout}")
     private int timeout;
+
+    @Bean
+    public static LifecycleBeanPostProcessor getLifecycleBeanPostProcessor() {
+        return new LifecycleBeanPostProcessor();
+    }
 
     /**
      * ShiroDialect，为了在thymeleaf里使用shiro的标签的bean
@@ -106,7 +112,7 @@ public class ShiroConfig {
         //设置realm.
         securityManager.setRealm(myShiroRealm());
         // 自定义缓存实现 使用redis
-        securityManager.setCacheManager(cacheManager());
+        //securityManager.setCacheManager(cacheManager());
         // 自定义session管理 使用redis
         securityManager.setSessionManager(sessionManager());
         return securityManager;
@@ -176,6 +182,7 @@ public class ShiroConfig {
         return redisCacheManager;
     }
 
+
     /**
      * RedisSessionDAO shiro sessionDao层的实现 通过redis
      * 使用的是shiro-redis开源插件
@@ -188,8 +195,7 @@ public class ShiroConfig {
     }
 
     /**
-     * Session Manager
-     * 使用的是shiro-redis开源插件
+     * shiro session的管理
      */
     @Bean
     public DefaultWebSessionManager sessionManager() {
@@ -197,4 +203,5 @@ public class ShiroConfig {
         sessionManager.setSessionDAO(redisSessionDAO());
         return sessionManager;
     }
+
 }

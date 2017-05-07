@@ -11,9 +11,7 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.util.ByteSource;
-import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -72,11 +70,11 @@ public class MyShiroRealm extends AuthorizingRealm {
     /**
      * 指定principalCollection 清除
      */
-    public void clearCachedAuthorizationInfo(PrincipalCollection principalCollection) {
+  /*  public void clearCachedAuthorizationInfo(PrincipalCollection principalCollection) {
 
         SimplePrincipalCollection principals = new SimplePrincipalCollection(
                 principalCollection, getName());
         super.clearCachedAuthorizationInfo(principals);
     }
-
+*/
 }

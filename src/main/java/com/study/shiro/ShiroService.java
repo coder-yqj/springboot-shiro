@@ -98,7 +98,7 @@ public class ShiroService {
      * 根据userId 清除当前session存在的用户的权限缓存
      * @param userIds 已经修改了权限的userId
      */
-    public void clearUserAuthByUserId(List<Integer> userIds){
+   /* public void clearUserAuthByUserId(List<Integer> userIds){
         if(null == userIds || userIds.size() == 0)	return ;
         //获取所有session
         Collection<Session> sessions = redisSessionDAO.getActiveSessions();
@@ -128,5 +128,5 @@ public class ShiroService {
         for (SimplePrincipalCollection simplePrincipalCollection : list) {
             realm.clearCachedAuthorizationInfo(simplePrincipalCollection);
         }
-    }
+    }*/
 }

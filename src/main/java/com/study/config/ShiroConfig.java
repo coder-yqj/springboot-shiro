@@ -41,6 +41,9 @@ public class ShiroConfig {
     @Value("${spring.redis.timeout}")
     private int timeout;
 
+    @Value("${spring.redis.password}")
+    private String password;
+
     @Bean
     public static LifecycleBeanPostProcessor getLifecycleBeanPostProcessor() {
         return new LifecycleBeanPostProcessor();
@@ -112,7 +115,7 @@ public class ShiroConfig {
         //设置realm.
         securityManager.setRealm(myShiroRealm());
         // 自定义缓存实现 使用redis
-        //securityManager.setCacheManager(cacheManager());
+        securityManager.setCacheManager(cacheManager());
         // 自定义session管理 使用redis
         securityManager.setSessionManager(sessionManager());
         return securityManager;
@@ -167,7 +170,7 @@ public class ShiroConfig {
         redisManager.setPort(port);
         redisManager.setExpire(1800);// 配置缓存过期时间
         redisManager.setTimeout(timeout);
-        // redisManager.setPassword(password);
+       // redisManager.setPassword(password);
         return redisManager;
     }
 

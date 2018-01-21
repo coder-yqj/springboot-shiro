@@ -40,7 +40,7 @@ public class ResourcesServiceImpl extends BaseService<Resources> implements Reso
     }
 
     @Override
-    @Cacheable(cacheNames="resources",key="#map['userid'].toString()+#map['type']")
+    //@Cacheable(cacheNames="resources",key="#map['userid'].toString()+#map['type']")
     public List<Resources> loadUserResources(Map<String, Object> map) {
         return resourcesMapper.loadUserResources(map);
     }

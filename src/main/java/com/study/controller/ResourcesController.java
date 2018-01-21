@@ -57,7 +57,7 @@ public class ResourcesController {
         return resourcesList;
     }
 
-    @CacheEvict(cacheNames="resources", allEntries=true)
+    //@CacheEvict(cacheNames="resources", allEntries=true)
     @RequestMapping(value = "/add")
     public String add(Resources resources){
         try{
@@ -70,7 +70,7 @@ public class ResourcesController {
             return "fail";
         }
     }
-    @CacheEvict(cacheNames="resources", allEntries=true)
+    //@CacheEvict(cacheNames="resources", allEntries=true)
     @RequestMapping(value = "/delete")
     public String delete(Integer id){
         try{
